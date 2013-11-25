@@ -36,3 +36,5 @@ $string['configurablereports'] = 'דוחות מתקדמים';
 $string['configurablereports:view'] = 'צפיה ב: דוחות מתקדמים';
 $string['page-report-configurablereports-index'] = 'צפיה בדוחות מתקדמים';
 $string['pluginname'] = 'דוחות מתקדמים';
+$string['coursereports'] = 'דוחות קורס';
+$string['systemreports'] = 'דוחות מערכת (משותפים)';

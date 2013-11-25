@@ -51,27 +51,28 @@ else
 //checking if user is capable of viewing this report in $context
 require_capability('report/configurablereports:view', $context);
 
-//global $DB, $USER, $CFG ,$COURSE;
-
 require_once($CFG->dirroot."/blocks/configurable_reports/locallib.php");
 
 // Site (Shared) reports
 $reports = $DB->get_records('block_configurable_reports',array('courseid' => SITEID),'name ASC');
 
 if ($reports) {
+    $items[] = get_string('systemreports','report_configurablereports');
+    $items[] = '<hr/>';
     foreach($reports as $report){
         if($report->visible && cr_check_report_permissions($report, $USER->id, $context)){
             $rname = format_string($report->name);
             $items[] = '<a href= "'.$CFG->wwwroot.'/blocks/configurable_reports/viewreport.php?id='.$report->id.'&courseid='.$course->id.'" alt="'.$rname.'">'.$rname.'</a>';
         }
     }
-    echo "<hr/>";
 }
 
 // Course reports
 $reports = $DB->get_records('block_configurable_reports',array('courseid' => $course->id),'name ASC');
 
 if ($reports) {
+    $items[] = '<br/>'.get_string('coursereports','report_configurablereports');
+    $items[] = '<hr/>';
     foreach($reports as $report){
         if($report->visible && cr_check_report_permissions($report, $USER->id, $context)){
             $rname = format_string($report->name);
@@ -82,10 +83,9 @@ if ($reports) {
 
 if(has_capability('block/configurable_reports:managereports', $context)
     || has_capability('block/configurable_reports:manageownreports', $context)){
-    $items[] = '<hr/><a href="'.$CFG->wwwroot.'/blocks/configurable_reports/managereport.php?courseid='.
-        $course->id.'">'.(get_string('managereports','block_configurable_reports')).'</a>';
+    $items[] = '<br/><div id="managereports"><a class="linkbutton" href="'.$CFG->wwwroot.'/blocks/configurable_reports/managereport.php?courseid='.
+        $course->id.'">'.(get_string('managereports','block_configurable_reports')).'</a></div>';
 }
-
 
 //making log entry
 add_to_log($course->id, 'course', 'report configurablereports', "report/configurablereports/index.php?id=$course->id", $course->id);
@@ -96,7 +96,7 @@ $PAGE->set_heading($course->fullname);
 
 //Displaying header and heading
 echo $OUTPUT->header();
-echo $OUTPUT->heading(format_string($course->fullname));
+//echo $OUTPUT->heading(get_string('systemreports','report_configurablereports'));
 
 // Display list of reports that are available to the user
 // (based on permissions defined on the configurable reports block, in general and per report)
@@ -105,7 +105,7 @@ if (!empty($items)) {
         echo "$report<br/>";
     }
 } else {
-    echo get_string('noreportsavailable','block_configurable_reports');
+    echo $OUTPUT->heading(get_string('noreportsavailable','block_configurable_reports'));
 }
 
 //display page footer

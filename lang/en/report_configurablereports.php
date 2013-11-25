@@ -36,3 +36,5 @@ $string['configurablereports'] = 'Configurable reports';
 $string['configurablereports:view'] = 'View "Configurable reports" course report';
 $string['page-report-configurablereports-index'] = 'View Configurable reports';
 $string['pluginname'] = 'Configurable reports';
+$string['coursereports'] = 'Course reports';
+$string['systemreports'] = 'System (shared) reports';
