@@ -55,20 +55,35 @@ require_capability('report/configurablereports:view', $context);
 
 require_once($CFG->dirroot."/blocks/configurable_reports/locallib.php");
 
+// Site (Shared) reports
+$reports = $DB->get_records('block_configurable_reports',array('courseid' => SITEID),'name ASC');
 
+if ($reports) {
+    foreach($reports as $report){
+        if($report->visible && cr_check_report_permissions($report, $USER->id, $context)){
+            $rname = format_string($report->name);
+            $items[] = '<a href= "'.$CFG->wwwroot.'/blocks/configurable_reports/viewreport.php?id='.$report->id.'&courseid='.$course->id.'" alt="'.$rname.'">'.$rname.'</a>';
+        }
+    }
+    echo "<hr/>";
+}
+
+// Course reports
 $reports = $DB->get_records('block_configurable_reports',array('courseid' => $course->id),'name ASC');
 
-if($reports){
+if ($reports) {
     foreach($reports as $report){
-        if($report->visible && cr_check_report_permissions($report,$USER->id,$context)){
+        if($report->visible && cr_check_report_permissions($report, $USER->id, $context)){
             $rname = format_string($report->name);
             $items[] = '<a href= "'.$CFG->wwwroot.'/blocks/configurable_reports/viewreport.php?id='.$report->id.'&courseid='.$course->id.'" alt="'.$rname.'">'.$rname.'</a>';
         }
     }
 }
 
-if(has_capability('block/configurable_reports:managereports', $context) || has_capability('block/configurable_reports:manageownreports', $context)){
-    $items[] = '<hr/><a href="'.$CFG->wwwroot.'/blocks/configurable_reports/managereport.php?courseid='.$course->id.'">'.(get_string('managereports','block_configurable_reports')).'</a>';
+if(has_capability('block/configurable_reports:managereports', $context)
+    || has_capability('block/configurable_reports:manageownreports', $context)){
+    $items[] = '<hr/><a href="'.$CFG->wwwroot.'/blocks/configurable_reports/managereport.php?courseid='.
+        $course->id.'">'.(get_string('managereports','block_configurable_reports')).'</a>';
 }
 
 
@@ -85,8 +100,12 @@ echo $OUTPUT->heading(format_string($course->fullname));
 
 // Display list of reports that are available to the user
 // (based on permissions defined on the configurable reports block, in general and per report)
-foreach($items as $report) {
-    echo "$report<br/>";
+if (!empty($items)) {
+    foreach($items as $report) {
+        echo "$report<br/>";
+    }
+} else {
+    echo get_string('noreportsavailable','block_configurable_reports');
 }
 
 //display page footer
