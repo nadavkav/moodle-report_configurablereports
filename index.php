@@ -60,9 +60,10 @@ if ($reports) {
     $items[] = get_string('systemreports','report_configurablereports');
     $items[] = '<hr/>';
     foreach($reports as $report){
-        if($report->visible && cr_check_report_permissions($report, $USER->id, $context)){
+        if(!$report->subreport && $report->visible && cr_check_report_permissions($report, $USER->id, $context)){
             $rname = format_string($report->name);
-            $items[] = '<a href= "'.$CFG->wwwroot.'/blocks/configurable_reports/viewreport.php?id='.$report->id.'&courseid='.$course->id.'" alt="'.$rname.'">'.$rname.'</a>';
+            $items[] = '<div id="reportlink"><a href= "'.$CFG->wwwroot.'/blocks/configurable_reports/viewreport.php?id='.$report->id.'&courseid='.$course->id.'" alt="'.$rname.'">'.$rname.'</a></div>'.
+                        '<div id="reportsummary">'.$report->summary.'</div>';
         }
     }
 }
@@ -74,9 +75,10 @@ if ($reports) {
     $items[] = '<br/>'.get_string('coursereports','report_configurablereports');
     $items[] = '<hr/>';
     foreach($reports as $report){
-        if($report->visible && cr_check_report_permissions($report, $USER->id, $context)){
+        if(!$report->subreport && $report->visible && cr_check_report_permissions($report, $USER->id, $context)){
             $rname = format_string($report->name);
-            $items[] = '<a href= "'.$CFG->wwwroot.'/blocks/configurable_reports/viewreport.php?id='.$report->id.'&courseid='.$course->id.'" alt="'.$rname.'">'.$rname.'</a>';
+            $items[] = '<div id="reportlink"><a href= "'.$CFG->wwwroot.'/blocks/configurable_reports/viewreport.php?id='.$report->id.'&courseid='.$course->id.'" alt="'.$rname.'">'.$rname.'</a></div>'.
+                '<div id="reportsummary">'.$report->summary.'</div>';
         }
     }
 }

@@ -32,14 +32,12 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version    = 2013090706;
+$plugin->version    = 2014011101;
 $plugin->requires   = 2010112400;
 $plugin->cron       = 0;
 $plugin->component  = 'report_configurablereports';
 $plugin->maturity   = MATURITY_STABLE;
 
-// todo: add dependency check
-// dependent on blocks/configurable_reports
 $plugin->dependencies = array(
-    'block_configurable_reports' => ANY_VERSION,
+    'block_configurable_reports' => 2014011101,
 );
